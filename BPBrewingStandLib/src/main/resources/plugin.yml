@@ -1,0 +1,5 @@
+name: BPBrewingStandLib
+main: org.sijbesma.bp.bpbrewingstandlib.BPBrewingStandLib
+version: 0.1
+api-version: 1.16 
+description: This an api for controlling the properties of the brewingstand

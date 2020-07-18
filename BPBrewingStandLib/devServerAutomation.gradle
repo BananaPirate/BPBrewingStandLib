@@ -1,0 +1,217 @@
+buildscript{
+	repositories{
+		mavenCentral()
+	}
+	dependencies{
+		classpath group: 'net.java.dev.jna', name: 'jna', version: '5.5.0'
+		classpath group: 'net.java.dev.jna', name: 'jna-platform', version: '5.5.0'
+	}
+}
+
+import com.sun.jna.Native
+import com.sun.jna.Pointer
+import com.sun.jna.platform.win32.User32
+import com.sun.jna.platform.win32.WinDef.HWND
+import com.sun.jna.platform.win32.WinDef.WPARAM
+import com.sun.jna.platform.win32.WinDef.LPARAM
+import com.sun.jna.platform.win32.WinUser.WNDENUMPROC
+import com.sun.jna.platform.win32.WinUser
+
+
+
+
+ext.server_type = "spigot"
+ext.dev_server_folder = "S:/spigot/Dev Servers"
+ext.server_jar_folder = "s:/spigot/Server Jars"
+ext.build_folder = "S:/Spigot/BuildTools"
+
+
+ext.processTitle = "$server_type-$api_version-dev-server"
+ext.foundProcess = false
+ext.message = ""
+ext.window_handle = null
+ext.server_exists = false
+ext.server_jar_exists = false
+ext.force_buildtools = false
+ext.write_configs = false
+
+def checkServerJar() {
+	String server_jar_location = "${server_jar_folder}/${server_type}-${api_version}.jar"
+	println "looking for: $server_jar_location"
+	File server_jar = new File(server_jar_location)
+	return server_jar.exists()
+}
+
+def findProcessByTitle(String title) {
+	println "checking for process with title: $processTitle"
+	User32 user32 = User32.INSTANCE;
+	HWND window_handle = null
+	user32.EnumWindows(new WNDENUMPROC() {
+				public boolean callback(HWND hWnd, Pointer arg1) {
+					char[] windowText = new char[512];
+					user32.GetWindowText(hWnd, windowText, 512);
+					String wText = Native.toString(windowText);
+					if (wText.isEmpty()) {
+						return true;
+					}
+					if (wText == processTitle) {
+						foundProcess = true
+						window_handle = hWnd
+					}
+					return true;
+				}
+			}, null)
+	return window_handle
+}
+
+
+def sendMessage(HWND window_handle, String message) {
+	println "sending message: ${message}"
+	User32 user32 = User32.INSTANCE;
+	user32.SendMessage(window_handle, WinUser.WM_CHAR, new WPARAM(13),new LPARAM(0))
+	for(int i=0; i < message.length();i++) {
+		def value = message.charAt(i) as Integer
+		user32.SendMessage(window_handle, WinUser.WM_CHAR, new WPARAM(value),new LPARAM(0))
+	}
+	user32.SendMessage(window_handle, WinUser.WM_CHAR, new WPARAM(13),new LPARAM(0))
+}
+
+def	doesDevServerExist() {
+	String server_location = "${dev_server_folder}/${api_version}/${server_type}-${api_version}.jar"
+	File server_file = new File(server_location)
+	if(server_file.exists()) {
+		return true
+	}else {
+		return false
+	}
+}
+
+task startDevServer(){
+	group = "Dev Server"
+	description = "Starts the dev server if it isn't already running"
+	doFirst{
+		if(findProcessByTitle(processTitle) == null) {
+			println "starting server"
+			String commandString = "cmd /C cd /D \"${dev_server_folder}/${api_version}/\" & start \"$processTitle\" java -Duser.dir=\"${dev_server_folder}/${api_version}/\" -jar \"${dev_server_folder}/${api_version}/${server_type}-${api_version}.jar\" -nogui & pause"
+			println commandString
+			commandString.execute()
+		}
+	}
+}
+
+
+
+task reloadDevServer{
+	group = "Dev Server"
+	description = "Reloads the dev server if it is already running"
+	doFirst{
+		HWND window_handle = findProcessByTitle(processTitle)
+		if(window_handle != null)
+			println "server should be reloaded"
+		sendMessage(window_handle,"reload confirm")
+	}
+}
+
+
+
+task fetchBuildTools{
+	onlyIf{force_buildtools}
+	doLast{
+		println "fetching latest BuildTools.jar"
+		String source = "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
+		File target = new File(build_folder+"/BuildTools.jar")
+		mkdir build_folder
+		ant.get(src: source, dest:target)
+	}
+}
+
+
+task runBuildTools{
+	dependsOn fetchBuildTools
+	doLast{
+		if( force_buildtools) {
+			println "running BuildTools.jar"
+			String bash_path = "/${build_folder}/".replace(":","").replace("\\","/")
+			String commandString = "cmd /C cd ${build_folder} & bash -c java -jar \"${bash_path}BuildTools.jar\" --rev ${api_version}"
+			String output_folder = server_jar_folder.replace(" ","^ ")
+			exec{
+				commandLine "cmd", "/C", "cd","\"${build_folder}\"","&", "bash", "-c" ,"java -jar \"${bash_path}BuildTools.jar\" --rev ${api_version}"
+			}
+			copy{
+				println "copying: ${build_folder}/${server_type}-${api_version}.jar"
+				println "to: ${server_jar_folder}"
+				from "${build_folder}/${server_type}-${api_version}.jar"
+				into "${server_jar_folder}"
+			}
+		}else {
+			println "Server Jar already exists, no need to compile"
+		}
+	}
+}
+
+
+
+task compileServerJar{
+	group = "Dev Server"
+	description = "Compile the server jar using BuildTools.jar, if needed."
+	doLast{
+		if (!checkServerJar()){
+			println "compile Server Jar"
+			force_buildtools = true;
+		}else {
+			println "Server Jar already exists"
+		}
+	}
+	finalizedBy runBuildTools
+}
+
+task forceCompileServerJar{
+	group = "Dev Server"
+	description = "Force compile the server jar using BuildTools.jar"
+	doLast{
+		force_buildtools = true
+	}
+	finalizedBy runBuildTools
+}
+
+
+
+
+task writeServerProperties{
+	onlyIf{write_configs}
+	doLast{
+		println "write server properties"
+		copy{
+			from "/server files"
+			include "*"
+			into "${dev_server_folder}/${api_version}"
+		}
+	}
+}
+
+task installDevServer{
+	doLast{
+		if(doesDevServerExist()) {
+			print 'dev server already setup'
+			write_configs = false
+		}else {
+			println "setting up dev server"
+			copy{
+				from "${server_jar_folder}/${server_type}-${api_version}.jar"
+				into "${dev_server_folder}/${api_version}"
+			}
+			write_configs = true
+		}
+	}
+	finalizedBy writeServerProperties
+}
+
+task setupDevServer{
+	group = "Dev Server"
+	description = "Sets up a spigot dev server, from scratch if needed"
+	dependsOn compileServerJar, installDevServer
+}
+
+
+
+

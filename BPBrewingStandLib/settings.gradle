@@ -1,0 +1,4 @@
+rootProject.name = 'BPBrewingStandLib'
+
+include ':BPUtils'
+project(':BPUtils').projectDir = new File(settingsDir, "../BPUtils");
