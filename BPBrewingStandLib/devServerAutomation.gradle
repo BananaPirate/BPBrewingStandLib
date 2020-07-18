@@ -26,7 +26,7 @@ ext.server_jar_folder = "s:/spigot/Server Jars"
 ext.build_folder = "S:/Spigot/BuildTools"
 
 
-ext.processTitle = "$server_type-$api_version-dev-server"
+ext.processTitle = "$server_type-$server_version-dev-server"
 ext.foundProcess = false
 ext.message = ""
 ext.window_handle = null
@@ -36,7 +36,7 @@ ext.force_buildtools = false
 ext.write_configs = false
 
 def checkServerJar() {
-	String server_jar_location = "${server_jar_folder}/${server_type}-${api_version}.jar"
+	String server_jar_location = "${server_jar_folder}/${server_type}-${server_version}.jar"
 	println "looking for: $server_jar_location"
 	File server_jar = new File(server_jar_location)
 	return server_jar.exists()
@@ -77,7 +77,7 @@ def sendMessage(HWND window_handle, String message) {
 }
 
 def	doesDevServerExist() {
-	String server_location = "${dev_server_folder}/${api_version}/${server_type}-${api_version}.jar"
+	String server_location = "${dev_server_folder}/${server_version}/${server_type}-${server_version}.jar"
 	File server_file = new File(server_location)
 	if(server_file.exists()) {
 		return true
@@ -92,7 +92,7 @@ task startDevServer(){
 	doFirst{
 		if(findProcessByTitle(processTitle) == null) {
 			println "starting server"
-			String commandString = "cmd /C cd /D \"${dev_server_folder}/${api_version}/\" & start \"$processTitle\" java -Duser.dir=\"${dev_server_folder}/${api_version}/\" -jar \"${dev_server_folder}/${api_version}/${server_type}-${api_version}.jar\" -nogui & pause"
+			String commandString = "cmd /C cd /D \"${dev_server_folder}/${server_version}/\" & start \"$processTitle\" java -Duser.dir=\"${dev_server_folder}/${server_version}/\" -jar \"${dev_server_folder}/${server_version}/${server_type}-${server_version}.jar\" -nogui & pause"
 			println commandString
 			commandString.execute()
 		}
@@ -132,15 +132,15 @@ task runBuildTools{
 		if( force_buildtools) {
 			println "running BuildTools.jar"
 			String bash_path = "/${build_folder}/".replace(":","").replace("\\","/")
-			String commandString = "cmd /C cd ${build_folder} & bash -c java -jar \"${bash_path}BuildTools.jar\" --rev ${api_version}"
+			String commandString = "cmd /C cd ${build_folder} & bash -c java -jar \"${bash_path}BuildTools.jar\" --rev ${server_version}"
 			String output_folder = server_jar_folder.replace(" ","^ ")
 			exec{
-				commandLine "cmd", "/C", "cd","\"${build_folder}\"","&", "bash", "-c" ,"java -jar \"${bash_path}BuildTools.jar\" --rev ${api_version}"
+				commandLine "cmd", "/C", "cd","\"${build_folder}\"","&", "bash", "-c" ,"java -jar \"${bash_path}BuildTools.jar\" --rev ${server_version}"
 			}
 			copy{
-				println "copying: ${build_folder}/${server_type}-${api_version}.jar"
+				println "copying: ${build_folder}/${server_type}-${server_version}.jar"
 				println "to: ${server_jar_folder}"
-				from "${build_folder}/${server_type}-${api_version}.jar"
+				from "${build_folder}/${server_type}-${server_version}.jar"
 				into "${server_jar_folder}"
 			}
 		}else {
@@ -184,7 +184,7 @@ task writeServerProperties{
 		copy{
 			from "/server files"
 			include "*"
-			into "${dev_server_folder}/${api_version}"
+			into "${dev_server_folder}/${server_version}"
 		}
 	}
 }
@@ -197,8 +197,8 @@ task installDevServer{
 		}else {
 			println "setting up dev server"
 			copy{
-				from "${server_jar_folder}/${server_type}-${api_version}.jar"
-				into "${dev_server_folder}/${api_version}"
+				from "${server_jar_folder}/${server_type}-${server_version}.jar"
+				into "${dev_server_folder}/${server_version}"
 			}
 			write_configs = true
 		}

@@ -29,14 +29,25 @@ dependencies{
 
 apply from: "devServerAutomation.gradle"
 
+processResources {
+	from(sourceSets.main.resources.srcDirs) {
+		expand ('plugin_version': project.ext.plugin_version, 'api_version': project.ext.api_version)
+		include 'plugin.yml'
+	}
+}
+
+
 
 shadowJar{
 	dependencies {
-		include('https://github.com/BananaPirate/BPUtils')
+		include(dependency('com.github.BananaPirate:BPUtils:master'))
 	}
 	archiveName = "${plugin_name}.jar"
 	relocate "org.sijbesma.bp.utils", "org.sijbesma.bp.${plugin_name}.utils"
 }
+
+
+
 
 task compilePlugin{
 	group = "Spigot plugin"
