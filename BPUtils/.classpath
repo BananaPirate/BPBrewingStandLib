@@ -28,6 +28,10 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-14/"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/BPUtils"/>
+	<classpathentry kind="lib" path="C:/Users/JJS/.gradle/caches/modules-2/files-2.1/org.spigotmc/spigot-api/1.16.1-R0.1-SNAPSHOT/12d5f0b4513e967034e25815b20c818a21dc2e9b/spigot-api-1.16.1-R0.1-SNAPSHOT.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value=""/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin/default"/>
 </classpath>
