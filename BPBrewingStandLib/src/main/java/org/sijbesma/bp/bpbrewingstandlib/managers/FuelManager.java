@@ -1,14 +1,13 @@
 package org.sijbesma.bp.bpbrewingstandlib.managers;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
+
 import java.util.LinkedList;
 import java.util.ListIterator;
 
 import org.bukkit.inventory.ItemStack;
-import org.sijbesma.bp.bpbrewingstandlib.containers.FuelContainer;
 import org.sijbesma.bp.bpbrewingstandlib.containers.FuelItemStack;
 
 import static org.sijbesma.bp.utils.DebugLogger.debug;
@@ -52,7 +51,7 @@ public class FuelManager {
 		ItemStack itemSingle = item.clone();
 		itemSingle.setAmount(1);
 		if(itemFuelMap.containsKey(itemSingle)) {
-			ArrayList<FuelItemStack>fuelItemStacks = itemFuelMap.get(itemSingle);
+			LinkedList<FuelItemStack>fuelItemStacks = itemFuelMap.get(itemSingle);
 			for(FuelItemStack fuelItemStack : fuelItemStacks) {
 				int amountContainer = fuelItemStack.getAmount();
 				if(amountContainer > 1 && amount >= amountContainer) {
@@ -94,43 +93,21 @@ public class FuelManager {
 		}
 		
 	}
-		
-		
-		
-//		
-//		if(itemStackContainerMap.containsKey(fuelItem)) {
-//			ArrayList<FuelContainer>fuelContainerList = itemFuelContainerMap.get(fuelItem);
-//			boolean insertedBefore = false;
-//			for(int i = 0; i < fuelContainerList.size();i++) {
-//				if(fuelContainerList.get(i).getFuelItemStack().getAmount() < fuelContainer.getFuelItemStack().getAmount()) {
-//					fuelContainerList.add(i, fuelContainer);
-//					insertedBefore = true;
-//					break;
-//				}
-//			}
-//			if(!insertedBefore) {
-//				fuelContainerList.add(fuelContainer);
-//			}
-//		}else {
-//			itemFuelContainerMap.put(fuelItem, new ArrayList<FuelContainer>());
-//			itemFuelContainerMap.get(fuelItem).add(fuelContainer);
-//		}
-//	}
 
 	/**
 	 * removes a FuelContainer from the registry of possible brewing stand fuel sources
 	 * @param fuelContainer the FuelContainer to remove
 	 */
-	public static void removeFuelItemStack(FuelContainer fuelContainer) {
+	public static void removeFuelItemStack(FuelItemStack fuelItemStack) {
 		debug("removeFuel",true);
-		fuelContainerSet.remove(fuelContainer);
-		ItemStack singleItem = fuelContainer.getFuelItemStack();
+		fuelItemStackSet.remove(fuelItemStack);
+		ItemStack singleItem = (ItemStack) fuelItemStack.clone();
 		singleItem.setAmount(1);
-		ArrayList<FuelContainer> fuelContainerList = itemFuelContainerMap.get(singleItem);
-		if(fuelContainerList.size() > 0) {
-			fuelContainerList.remove(fuelContainer);
+		LinkedList<FuelItemStack> fuelItemStackList = itemFuelMap.get(singleItem);
+		if(fuelItemStackList.size() > 0) {
+			fuelItemStackList.remove(fuelItemStack);
 		}else {
-			itemFuelContainerMap.remove(singleItem);
+			itemFuelMap.remove(singleItem);
 		}
 		repopulateValidInFuelSlotSet();
 	}
@@ -138,10 +115,10 @@ public class FuelManager {
 	private static void repopulateValidInFuelSlotSet() {
 		debug("repopulateValidInFuelSlotSet",true);
 		validInFuelSlotSet.clear();
-		for (FuelContainer fuelContainer : fuelContainerSet) {
-			ItemStack fuelItem = fuelContainer.getFuelItemStack();
-			fuelItem.setAmount(1);
-			validInFuelSlotSet.add(fuelItem);
+		for (FuelItemStack fuelItemStack : fuelItemStackSet) {
+			ItemStack singleItem = fuelItemStack.clone();
+			singleItem.setAmount(1);
+			validInFuelSlotSet.add(singleItem);
 		}
 	}
 

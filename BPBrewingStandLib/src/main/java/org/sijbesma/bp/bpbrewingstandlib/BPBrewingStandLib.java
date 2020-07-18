@@ -3,7 +3,6 @@ package org.sijbesma.bp.bpbrewingstandlib;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.sijbesma.bp.bpbrewingstandlib.containers.FuelContainer;
 import org.sijbesma.bp.bpbrewingstandlib.containers.FuelItemStack;
 import org.sijbesma.bp.bpbrewingstandlib.event.handlers.BrewerInventoryEventHandler;
 import org.sijbesma.bp.bpbrewingstandlib.event.listeners.InventoryEventListener;
