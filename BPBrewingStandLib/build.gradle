@@ -56,7 +56,7 @@ task compilePlugin{
 	doLast{
 		copy{
 			from "/build/libs/${plugin_name}.jar"
-			into "${dev_server_folder}/${api_version}/plugins"
+			into "${dev_server_folder}/${server_version}/plugins"
 		}
 	}
 }
