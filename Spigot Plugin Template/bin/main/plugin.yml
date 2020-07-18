@@ -1,0 +1,5 @@
+name: ${plugin_name}
+main: org.sijbesma.bp.plugintemplate.${plugin_name}
+version: ${plugin_version}
+api-version: ${api_version} 
+description: This is a plugin template.
