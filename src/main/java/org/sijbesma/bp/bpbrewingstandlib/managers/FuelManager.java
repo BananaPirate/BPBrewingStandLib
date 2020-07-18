@@ -35,6 +35,7 @@ public class FuelManager {
 	public static boolean isValidFuelSlotItem(ItemStack item) {
 		item = item.clone();
 		item.setAmount(1);
+		debug(item.toString());
 		if (validInFuelSlotSet.contains(item)) {
 			return true;
 		}
@@ -52,6 +53,7 @@ public class FuelManager {
 		itemSingle.setAmount(1);
 		if(itemFuelMap.containsKey(itemSingle)) {
 			LinkedList<FuelItemStack>fuelItemStacks = itemFuelMap.get(itemSingle);
+			debug("Collision list: "+fuelItemStacks);
 			for(FuelItemStack fuelItemStack : fuelItemStacks) {
 				int amountContainer = fuelItemStack.getAmount();
 				if(amountContainer > 1 && amount >= amountContainer) {
@@ -71,17 +73,24 @@ public class FuelManager {
 	 */
 	public static void addFuelItemStack(FuelItemStack fuelItemStack) {
 		fuelItemStack = fuelItemStack.clone();
-		ItemStack itemStack = (ItemStack) fuelItemStack;
 		fuelItemStackSet.add(fuelItemStack);
+		debug("Registering Item: "+fuelItemStack);
+		//
+		ItemStack itemStack = new ItemStack(fuelItemStack);
 		itemStack.setAmount(1);
+		debug("Registering Item as Valid in Fuel Slot as: "+itemStack);
 		validInFuelSlotSet.add(itemStack);
+		
 		if(itemFuelMap.containsKey(itemStack)) {
+			debug("Collision Detected");
 			LinkedList<FuelItemStack> fuelItemStackList = itemFuelMap.get(itemStack);
 			boolean insertedBefore = false;
 			ListIterator<FuelItemStack> it = fuelItemStackList.listIterator();
 			while(it.hasNext()) {
 				FuelItemStack currentIndex = it.next();
 				if(currentIndex.getAmount() < fuelItemStack.getAmount()) {
+					debug("inserted before: "+currentIndex);
+					it.previous();
 					it.add(fuelItemStack);
 					insertedBefore = true;
 					break;
@@ -90,6 +99,10 @@ public class FuelManager {
 			if(!insertedBefore) {
 				fuelItemStackList.addLast(fuelItemStack);
 			}
+			debug("Current Collision List: "+fuelItemStackList);
+		}else {
+			itemFuelMap.put(itemStack, new LinkedList<FuelItemStack>());
+			itemFuelMap.get(itemStack).add(fuelItemStack);
 		}
 		
 	}

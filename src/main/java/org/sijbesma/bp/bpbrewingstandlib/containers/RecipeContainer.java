@@ -8,22 +8,22 @@ public class RecipeContainer {
 	private ItemStack bottle;
 	private ItemStack result;
 	private int fuelPower;
-	private boolean strictBottleQuantities;
+	private int maxBottleStackSize;
 	
-	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result, int fuelPower, boolean strictBottleQuantities) {
+	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result, int fuelUsage, int maxBottleStack) {
 		this.ingredient = ingredient;
 		this.bottle = bottle;
 		this.result = result;
-		this.fuelPower = fuelPower;
-		this.strictBottleQuantities = strictBottleQuantities;
+		this.fuelPower = fuelUsage;
+		this.maxBottleStackSize = maxBottleStackSize;
 	}
 	
 	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result, int fuelPower) {
-		this(ingredient,bottle,result,fuelPower,false);
+		this(ingredient,bottle,result,fuelPower,-1);
 	}
 	
 	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result) {
-		this(ingredient,bottle,result,1,false);
+		this(ingredient,bottle,result,1,-1);
 	}
 	
 	public RecipeContainer() {
@@ -62,14 +62,15 @@ public class RecipeContainer {
 		this.fuelPower = fuelPower;
 	}
 
-	public boolean isStrictBottleQuantities() {
-		return strictBottleQuantities;
+	public int getMaxBottleStackSize() {
+		return maxBottleStackSize;
 	}
 
-	public void setStrictBottleQuantities(boolean strictBottleQuantities) {
-		this.strictBottleQuantities = strictBottleQuantities;
+	public void setMaxBottleStackSize(int maxBottleStackSize) {
+		this.maxBottleStackSize = maxBottleStackSize;
 	}
-	
+
+
 	
 	
 }

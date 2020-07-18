@@ -63,5 +63,10 @@ public class FuelItemStack extends ItemStack{
 	}
 	
 	
+	@Override
+	public String toString() {
+		return super.toString().replace("ItemStack", "FuelItemStack");
+	}
+	
 	
 }
