@@ -8,21 +8,20 @@ import org.bukkit.inventory.ItemStack;
 import org.sijbesma.bp.bpbrewingstandlib.containers.RecipeContainer;
 
 public class RecipeManager {
-	
+	//slot validation data structures
 	private static HashSet<ItemStack> validIngredientSlotSet = new HashSet<ItemStack>();
 	private static HashSet<ItemStack> validBottleSlotSet = new HashSet<ItemStack>();
-	
+	//recipe registry data structures.
 	private static HashSet<RecipeContainer> recipeSet = new HashSet<RecipeContainer>();
 	private static HashMap<ItemStack,LinkedList<RecipeContainer>> ingredientRecipeMap = new HashMap<ItemStack,LinkedList<RecipeContainer>>();
 	private static HashMap<ItemStack,LinkedList<RecipeContainer>> bottleRecipeMap = new HashMap<ItemStack,LinkedList<RecipeContainer>>();
-
+	//
 	
 	public static boolean isValidIngredientSlot(ItemStack item) {
 		item = item.clone();
 		item.setAmount(1);
 		return validIngredientSlotSet.contains(item);
 	}
-	
 	
 	public static boolean isValidBottleSlot(ItemStack item) {
 		item = item.clone();

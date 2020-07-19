@@ -36,7 +36,11 @@ public class RecipeContainer {
 		//empty for construction via setters.
 	}
 
-	public  RecipeContainer clone() {
+	/**
+	 * This is the clone constructor for RecipeContainer, it clones both the RecipeContainer itself as well as the ItemStacks and values it contains.
+	 * As such this is a deep copy.
+	 */
+	public RecipeContainer clone() {
 		ItemStack ingredient = this.ingredient.clone();
 		ItemStack bottle = this.bottle.clone();
 		ItemStack result = this.result.clone();
@@ -46,9 +50,10 @@ public class RecipeContainer {
 		return new RecipeContainer(ingredient,bottle,result,fuelUsage,maxBottleStackSize,maxResultStackSize);
 	}
 	
-	
-	
-	
+	/**
+	 * This returns a clone of the ingredient ItemStack, if you wish to alter the ingredient use the setter.
+	 * @return clone of the ingredient ItemStack
+	 */
 	public ItemStack getIngredient() {
 		return ingredient.clone();
 	}
@@ -56,7 +61,11 @@ public class RecipeContainer {
 	public void setIngredient(ItemStack ingredient) {
 		this.ingredient = ingredient;
 	}
-
+	
+	/**
+	 * This returns a clone of the bottle ItemStack, if you wish to alter the bottle use the setter.
+	 * @return clone of the bottle ItemStack
+	 */
 	public ItemStack getBottle() {
 		return bottle.clone();
 	}
@@ -65,6 +74,10 @@ public class RecipeContainer {
 		this.bottle = bottle;
 	}
 
+	/**
+	 * This returns a clone of the result ItemStack, if you wish to alter the result use the setter.
+	 * @return clone of the result ItemStack
+	 */
 	public ItemStack getResult() {
 		return result.clone();
 	}
