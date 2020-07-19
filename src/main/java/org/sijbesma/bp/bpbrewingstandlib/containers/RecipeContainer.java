@@ -10,7 +10,7 @@ public class RecipeContainer {
 	private int fuelPower;
 	private int maxBottleStackSize;
 	
-	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result, int fuelUsage, int maxBottleStack) {
+	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result, int fuelUsage, int maxBottleStackSize) {
 		this.ingredient = ingredient;
 		this.bottle = bottle;
 		this.result = result;
@@ -31,7 +31,7 @@ public class RecipeContainer {
 	}
 
 	public ItemStack getIngredient() {
-		return ingredient;
+		return ingredient.clone();
 	}
 
 	public void setIngredient(ItemStack ingredient) {
@@ -39,7 +39,7 @@ public class RecipeContainer {
 	}
 
 	public ItemStack getBottle() {
-		return bottle;
+		return bottle.clone();
 	}
 
 	public void setBottle(ItemStack bottle) {
@@ -47,7 +47,7 @@ public class RecipeContainer {
 	}
 
 	public ItemStack getResult() {
-		return result;
+		return result.clone();
 	}
 
 	public void setResult(ItemStack result) {
