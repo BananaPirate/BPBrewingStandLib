@@ -35,8 +35,7 @@ public class RecipeManager {
 		//add to the recipeSet
 		recipeSet.add(recipe);
 		//
-		ItemStack ingredient = recipe.getIngredient();
-		ItemStack singleIngredient = ingredient.clone();
+		ItemStack singleIngredient = recipe.getIngredient();
 		singleIngredient.setAmount(1);
 		validIngredientSlotSet.add(singleIngredient);
 		if(ingredientRecipeMap.containsKey(singleIngredient)) {
@@ -46,9 +45,8 @@ public class RecipeManager {
 			ingredientRecipeMap.get(singleIngredient).add(recipe);
 		}
 		//
-		ItemStack bottle = recipe.getBottle();
-		ItemStack singleBottle = bottle.clone();
-		bottle.setAmount(1);
+		ItemStack singleBottle = recipe.getBottle();
+		singleBottle.setAmount(1);
 		validBottleSlotSet.add(singleBottle);
 		if(bottleRecipeMap.containsKey(singleBottle)) {
 			bottleRecipeMap.get(singleBottle).add(recipe);
@@ -57,8 +55,7 @@ public class RecipeManager {
 			bottleRecipeMap.get(singleBottle).add(recipe);
 		}
 		//
-		ItemStack result = recipe.getResult();
-		ItemStack singleResult = result.clone();
+		ItemStack singleResult = recipe.getResult();
 		singleResult.setAmount(1);
 		validBottleSlotSet.add(singleResult);
 	}
@@ -66,8 +63,7 @@ public class RecipeManager {
 	public static void removeRecipeContainer(RecipeContainer recipe) {
 		recipeSet.remove(recipe);
 		//
-		ItemStack ingredient = recipe.getIngredient();
-		ItemStack singleIngredient = ingredient.clone();
+		ItemStack singleIngredient = recipe.getIngredient();
 		singleIngredient.setAmount(1);
 		LinkedList<RecipeContainer>ingredientRecipeList = ingredientRecipeMap.get(singleIngredient);
 		ingredientRecipeList.remove(recipe);
@@ -75,8 +71,7 @@ public class RecipeManager {
 			ingredientRecipeMap.remove(singleIngredient);
 		}
 		//
-		ItemStack bottle = recipe.getBottle();
-		ItemStack singleBottle = bottle.clone();
+		ItemStack singleBottle = recipe.getBottle();
 		singleBottle.setAmount(1);
 		LinkedList<RecipeContainer>bottleRecipeList = bottleRecipeMap.get(singleBottle);
 		bottleRecipeList.remove(recipe);
@@ -91,14 +86,17 @@ public class RecipeManager {
 		validIngredientSlotSet.clear();
 		validBottleSlotSet.clear();
 		for(RecipeContainer recipe: recipeSet) {
-			ItemStack ingredient = recipe.getIngredient();
-			ItemStack singleIngredient = ingredient.clone();
+			ItemStack singleIngredient = recipe.getIngredient();
 			singleIngredient.setAmount(1);
 			validIngredientSlotSet.add(singleIngredient);
-			ItemStack bottle = recipe.getBottle();
-			ItemStack singleBottle = bottle.clone();
-			bottle.setAmount(1);
+			//
+			ItemStack singleBottle = recipe.getBottle();
+			singleBottle.setAmount(1);
 			validBottleSlotSet.add(singleBottle);
+			//
+			ItemStack singleResult = recipe.getResult();
+			singleResult.setAmount(1);
+			validBottleSlotSet.add(singleResult);
 		}
 	}
 	
