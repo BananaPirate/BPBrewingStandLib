@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.sijbesma.bp.bpbrewingstandlib.containers.FuelItemStack;
+import org.sijbesma.bp.bpbrewingstandlib.containers.RecipeContainer;
 import org.sijbesma.bp.bpbrewingstandlib.event.handlers.BrewerInventoryEventHandler;
 import org.sijbesma.bp.bpbrewingstandlib.event.listeners.InventoryEventListener;
 import org.sijbesma.bp.bpbrewingstandlib.managers.FuelManager;
@@ -34,6 +35,7 @@ public class BPBrewingStandLib extends JavaPlugin{
 	public void onEnable() {
 		BPBrewingStandLib.INSTANCE.getServer().getPluginManager().registerEvents(inventoryEventListener, BPBrewingStandLib.INSTANCE);
 		registerTestFuels();
+		registerTestRecipes();
 	}
 	
 	@Override
@@ -48,6 +50,22 @@ public class BPBrewingStandLib extends JavaPlugin{
 		FuelManager.addFuelItemStack(singleEnderPearl);
 		FuelItemStack fourEnderPearls = new FuelItemStack(new ItemStack(Material.ENDER_PEARL,4),24);
 		FuelManager.addFuelItemStack(fourEnderPearls);
-		
+	}
+	
+	private void registerTestRecipes() {
+		ItemStack ingredient = new ItemStack(Material.SHROOMLIGHT,1);
+		ItemStack bottle = new ItemStack(Material.GOLD_INGOT,1);
+		ItemStack result = new ItemStack(Material.NETHERITE_INGOT,1);
+		RecipeContainer recipe = new RecipeContainer(ingredient, bottle, result);
+		recipe.setMaxBottleStackSize(1);
+		recipe.setMaxResultStackSize(1);
+		RecipeManager.addRecipe(recipe);
+		ingredient = new ItemStack(Material.NAUTILUS_SHELL,1);
+		bottle = new ItemStack(Material.PACKED_ICE,5);
+		result = new ItemStack(Material.HEART_OF_THE_SEA,1);
+		recipe.setMaxBottleStackSize(5);
+		recipe.setMaxResultStackSize(1);
+		recipe = new RecipeContainer(ingredient, bottle, result);
+		RecipeManager.addRecipe(recipe);
 	}
 }

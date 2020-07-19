@@ -9,35 +9,36 @@ import org.sijbesma.bp.bpbrewingstandlib.containers.RecipeContainer;
 
 public class RecipeManager {
 	
-	private static HashSet<ItemStack> validInIngredientSlotSet = new HashSet<ItemStack>();
-	private static HashSet<ItemStack> validInBottleSlotSet = new HashSet<ItemStack>();
+	private static HashSet<ItemStack> validIngredientSlotSet = new HashSet<ItemStack>();
+	private static HashSet<ItemStack> validBottleSlotSet = new HashSet<ItemStack>();
 	
 	private static HashSet<RecipeContainer> recipeSet = new HashSet<RecipeContainer>();
 	private static HashMap<ItemStack,LinkedList<RecipeContainer>> ingredientRecipeMap = new HashMap<ItemStack,LinkedList<RecipeContainer>>();
 	private static HashMap<ItemStack,LinkedList<RecipeContainer>> bottleRecipeMap = new HashMap<ItemStack,LinkedList<RecipeContainer>>();
 
 	
-	public static boolean isValidInIngredientSlot(ItemStack item) {
+	public static boolean isValidIngredientSlot(ItemStack item) {
 		item = item.clone();
 		item.setAmount(1);
-		return validInIngredientSlotSet.contains(item);
+		return validIngredientSlotSet.contains(item);
 	}
 	
 	
-	public static boolean isValidInBottleSlot(ItemStack item) {
+	public static boolean isValidBottleSlot(ItemStack item) {
 		item = item.clone();
 		item.setAmount(1);
-		return validInBottleSlotSet.contains(item);
+		return validBottleSlotSet.contains(item);
 	}
 	
-	public static void addRecipeContainer(RecipeContainer recipe) {
+	public static void addRecipe(RecipeContainer recipe) {
+		recipe = recipe.clone();
 		//add to the recipeSet
 		recipeSet.add(recipe);
 		//
 		ItemStack ingredient = recipe.getIngredient();
 		ItemStack singleIngredient = ingredient.clone();
 		singleIngredient.setAmount(1);
-		validInIngredientSlotSet.add(singleIngredient);
+		validIngredientSlotSet.add(singleIngredient);
 		if(ingredientRecipeMap.containsKey(singleIngredient)) {
 			ingredientRecipeMap.get(singleIngredient).add(recipe);
 		} else {
@@ -48,13 +49,18 @@ public class RecipeManager {
 		ItemStack bottle = recipe.getBottle();
 		ItemStack singleBottle = bottle.clone();
 		bottle.setAmount(1);
-		validInBottleSlotSet.add(singleBottle);
+		validBottleSlotSet.add(singleBottle);
 		if(bottleRecipeMap.containsKey(singleBottle)) {
 			bottleRecipeMap.get(singleBottle).add(recipe);
 		}else {
 			bottleRecipeMap.put(singleBottle, new LinkedList<RecipeContainer>());
 			bottleRecipeMap.get(singleBottle).add(recipe);
 		}
+		//
+		ItemStack result = recipe.getResult();
+		ItemStack singleResult = result.clone();
+		singleResult.setAmount(1);
+		validBottleSlotSet.add(singleResult);
 	}
 	
 	public static void removeRecipeContainer(RecipeContainer recipe) {
@@ -78,21 +84,21 @@ public class RecipeManager {
 			bottleRecipeMap.remove(singleBottle);
 		}
 		//
-		repopulateValidInSlotSets();
+		repopulateValidSlotSets();
 	}
 	
-	private static void repopulateValidInSlotSets() {
-		validInIngredientSlotSet.clear();
-		validInBottleSlotSet.clear();
+	private static void repopulateValidSlotSets() {
+		validIngredientSlotSet.clear();
+		validBottleSlotSet.clear();
 		for(RecipeContainer recipe: recipeSet) {
 			ItemStack ingredient = recipe.getIngredient();
 			ItemStack singleIngredient = ingredient.clone();
 			singleIngredient.setAmount(1);
-			validInIngredientSlotSet.add(singleIngredient);
+			validIngredientSlotSet.add(singleIngredient);
 			ItemStack bottle = recipe.getBottle();
 			ItemStack singleBottle = bottle.clone();
 			bottle.setAmount(1);
-			validInBottleSlotSet.add(singleBottle);
+			validBottleSlotSet.add(singleBottle);
 		}
 	}
 	

@@ -35,7 +35,6 @@ public class FuelManager {
 	public static boolean isValidFuelSlotItem(ItemStack item) {
 		item = item.clone();
 		item.setAmount(1);
-		debug(item.toString());
 		if (validInFuelSlotSet.contains(item)) {
 			return true;
 		}
@@ -53,7 +52,6 @@ public class FuelManager {
 		itemSingle.setAmount(1);
 		if(itemFuelMap.containsKey(itemSingle)) {
 			LinkedList<FuelItemStack>fuelItemStacks = itemFuelMap.get(itemSingle);
-			debug("Collision list: "+fuelItemStacks);
 			for(FuelItemStack fuelItemStack : fuelItemStacks) {
 				int amountContainer = fuelItemStack.getAmount();
 				if(amountContainer > 1 && amount >= amountContainer) {
