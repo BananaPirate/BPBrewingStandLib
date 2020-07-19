@@ -7,29 +7,35 @@ public class RecipeContainer {
 	private ItemStack ingredient;
 	private ItemStack bottle;
 	private ItemStack result;
+	private int brewingTime;
 	private int fuelUsage;
 	private int maxBottleStackSize;
 	private int maxResultStackSize;
 	
-	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result, int fuelUsage, int maxBottleStackSize, int maxResultStackSize) {
+	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result,int brewingTime, int fuelUsage, int maxBottleStackSize, int maxResultStackSize) {
 		this.ingredient = ingredient;
 		this.bottle = bottle;
 		this.result = result;
+		this.brewingTime = brewingTime;
 		this.fuelUsage = fuelUsage;
 		this.maxBottleStackSize = maxBottleStackSize;
 		this.maxResultStackSize = maxResultStackSize;
 	}
 	
-	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result, int fuelUsage, int maxBottleStackSize) {
-		this(ingredient,bottle,result,fuelUsage,maxBottleStackSize,-1);
+	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result, int brewingTime, int fuelUsage, int maxBottleStackSize) {
+		this(ingredient,bottle,result,brewingTime,fuelUsage,maxBottleStackSize,-1);
 	}
 	
-	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result, int fuelUsage) {
-		this(ingredient,bottle,result,fuelUsage,-1,-1);
+	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result, int brewingTime, int fuelUsage) {
+		this(ingredient,bottle,result,brewingTime,fuelUsage,-1,-1);
+	}
+	
+	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result, int brewingTime) {
+		this(ingredient,bottle,result,brewingTime,1,-1,-1);
 	}
 	
 	public RecipeContainer(ItemStack ingredient, ItemStack bottle, ItemStack result) {
-		this(ingredient,bottle,result,1,-1,-1);
+		this(ingredient,bottle,result,400,1,-1,-1);
 	}
 	
 	public RecipeContainer() {
@@ -108,6 +114,14 @@ public class RecipeContainer {
 
 	public void setMaxResultStackSize(int maxResultStackSize) {
 		this.maxResultStackSize = maxResultStackSize;
+	}
+
+	public int getBrewingTime() {
+		return brewingTime;
+	}
+
+	public void setBrewingTime(int brewingTime) {
+		this.brewingTime = brewingTime;
 	}
 
 

@@ -11,6 +11,8 @@ public class RecipeManager {
 	//slot validation data structures
 	private static HashSet<ItemStack> validIngredientSlotSet = new HashSet<ItemStack>();
 	private static HashSet<ItemStack> validBottleSlotSet = new HashSet<ItemStack>();
+	//stack maximums for the bottle\result slot per item
+	private static HashMap<ItemStack,Integer> bottleSlotStackMaxMap= new HashMap<ItemStack,Integer>();
 	//recipe registry data structures.
 	private static HashSet<RecipeContainer> recipeSet = new HashSet<RecipeContainer>();
 	private static HashMap<ItemStack,LinkedList<RecipeContainer>> ingredientRecipeMap = new HashMap<ItemStack,LinkedList<RecipeContainer>>();
@@ -29,11 +31,20 @@ public class RecipeManager {
 		return validBottleSlotSet.contains(item);
 	}
 	
+	public static int getMaxStackSizeAllowed(ItemStack item) {
+		item = item.clone();
+		item.setAmount(1);
+		//return value if exists else return 0
+		return bottleSlotStackMaxMap.containsKey(item) ? bottleSlotStackMaxMap.get(item) : 0 ;
+	}
+	
+	
 	public static void addRecipe(RecipeContainer recipe) {
 		recipe = recipe.clone();
 		//add to the recipeSet
 		recipeSet.add(recipe);
 		//
+		//ingredient
 		ItemStack singleIngredient = recipe.getIngredient();
 		singleIngredient.setAmount(1);
 		validIngredientSlotSet.add(singleIngredient);
@@ -44,9 +55,21 @@ public class RecipeManager {
 			ingredientRecipeMap.get(singleIngredient).add(recipe);
 		}
 		//
+		//bottle
 		ItemStack singleBottle = recipe.getBottle();
 		singleBottle.setAmount(1);
 		validBottleSlotSet.add(singleBottle);
+		//stores whichever value for that item in bottleSlot is largest.
+		int bottleMax = recipe.getMaxBottleStackSize();
+		if (bottleSlotStackMaxMap.containsKey(singleBottle)) {
+			int storedMax = bottleSlotStackMaxMap.get(singleBottle);
+			if(storedMax >= 0 && storedMax < bottleMax) {
+				bottleSlotStackMaxMap.replace(singleBottle, bottleMax);
+			}
+		} else {
+			bottleSlotStackMaxMap.put(singleBottle,bottleMax);
+		}
+		//to find recipe by bottle
 		if(bottleRecipeMap.containsKey(singleBottle)) {
 			bottleRecipeMap.get(singleBottle).add(recipe);
 		}else {
@@ -54,9 +77,21 @@ public class RecipeManager {
 			bottleRecipeMap.get(singleBottle).add(recipe);
 		}
 		//
+		//result
+		//result uses the bottle slot as well.
 		ItemStack singleResult = recipe.getResult();
 		singleResult.setAmount(1);
 		validBottleSlotSet.add(singleResult);
+		//stores whichever value for that item in bottleSlot is largest.
+		int resultMax = recipe.getMaxResultStackSize();
+		if (bottleSlotStackMaxMap.containsKey(singleResult)) {
+			int storedMax = bottleSlotStackMaxMap.get(singleResult);
+			if(storedMax >= 0 && storedMax < resultMax) {
+				bottleSlotStackMaxMap.replace(singleResult, resultMax);
+			}
+		} else {
+			bottleSlotStackMaxMap.put(singleResult,resultMax);
+		}
 	}
 	
 	public static void removeRecipeContainer(RecipeContainer recipe) {

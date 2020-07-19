@@ -21,6 +21,7 @@ public class BrewerInventoryEventHandler {
 	}
 	
 	public void onPlayerShiftClick(InventoryClickEvent event) {
+		//this is test code
 		debug("onPlayerShiftClick",true);
 		ItemStack currentItem = event.getCurrentItem();
 		debug("Current Item              : "+currentItem);
@@ -29,6 +30,7 @@ public class BrewerInventoryEventHandler {
 		boolean isValidBottleSlotItem = RecipeManager.isValidBottleSlot(currentItem);
 		debug("Valid Ingredient Slot Item: "+isValidIngredientSlotItem);
 		debug("Valid Bottle Slot Item    : "+isValidBottleSlotItem);
+		debug("Max Bottle Slot Stack Size: "+RecipeManager.getMaxStackSizeAllowed(currentItem));
 		debug("Valid Fuel Slot Item      : "+isValidFuelSlotItem);		
 		if(isValidFuelSlotItem) {
 			debug("Fuel Power         : "+FuelManager.getFuelPower(currentItem));
