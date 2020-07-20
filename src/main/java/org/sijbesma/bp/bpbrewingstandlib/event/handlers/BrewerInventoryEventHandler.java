@@ -36,7 +36,7 @@ public class BrewerInventoryEventHandler {
 		boolean changedInventory = false;
 		Inventory inventory = event.getInventory();
 		ItemStack currentItem = event.getCurrentItem();
-		int currentSlot = event.getSlot();
+		int currentSlot = event.getRawSlot();
 
 		debug("Current Item              : " + currentItem);
 		for(int slot : slotInsertOrder) {

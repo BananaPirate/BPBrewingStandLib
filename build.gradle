@@ -26,7 +26,6 @@ dependencies{
 	compile 'com.github.BananaPirate:BPUtils:master-SNAPSHOT'
 }
 
-
 apply from: "devServerAutomation.gradle"
 
 processResources {
