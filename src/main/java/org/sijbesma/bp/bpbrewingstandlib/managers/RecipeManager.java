@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.bukkit.inventory.ItemStack;
-import org.sijbesma.bp.bpbrewingstandlib.containers.RecipeContainer;
+import org.sijbesma.bp.bpbrewingstandlib.datatypes.RecipeContainer;
 
 public class RecipeManager {
 	//slot validation data structures

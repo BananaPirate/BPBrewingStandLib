@@ -14,16 +14,16 @@ plugins {
 }
 
 repositories{
+	maven { url "https://jitpack.io" }
 	jcenter()
 	mavenCentral()
 	maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
 	maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
-	maven { url "https://jitpack.io" }
 }
 
 dependencies{
 	compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
-	compile 'com.github.BananaPirate:BPUtils:master'
+	compile 'com.github.BananaPirate:BPUtils:master-SNAPSHOT'
 }
 
 
@@ -40,7 +40,7 @@ processResources {
 
 shadowJar{
 	dependencies {
-		include(dependency('com.github.BananaPirate:BPUtils:master'))
+		include(dependency('com.github.BananaPirate:BPUtils:master-SNAPSHOT'))
 	}
 	archiveName = "${plugin_name}.jar"
 	relocate "org.sijbesma.bp.utils", "org.sijbesma.bp.${plugin_name}.utils"

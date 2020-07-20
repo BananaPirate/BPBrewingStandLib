@@ -1,4 +1,4 @@
-package org.sijbesma.bp.bpbrewingstandlib.containers;
+package org.sijbesma.bp.bpbrewingstandlib.datatypes;
 
 import org.bukkit.inventory.ItemStack;
 

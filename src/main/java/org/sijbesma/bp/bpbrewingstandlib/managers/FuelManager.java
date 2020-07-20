@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 import org.bukkit.inventory.ItemStack;
-import org.sijbesma.bp.bpbrewingstandlib.containers.FuelItemStack;
+import org.sijbesma.bp.bpbrewingstandlib.datatypes.FuelItemStack;
 
 import static org.sijbesma.bp.utils.DebugLogger.debug;
 
