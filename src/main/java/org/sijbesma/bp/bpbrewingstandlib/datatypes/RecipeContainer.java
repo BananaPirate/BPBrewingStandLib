@@ -50,10 +50,11 @@ public class RecipeContainer {
 		ItemStack ingredient = this.ingredient.clone();
 		ItemStack bottle = this.bottle.clone();
 		ItemStack result = this.result.clone();
+                int brewingTime = this.brewingTime;
 		int fuelUsage = this.fuelUsage;
 		int maxBottleStackSize = this.maxBottleStackSize;
 		int maxResultStackSize = this.maxResultStackSize;
-		return new RecipeContainer(ingredient,bottle,result,fuelUsage,maxBottleStackSize,maxResultStackSize);
+		return new RecipeContainer(ingredient,bottle,result,brewingTime,fuelUsage,maxBottleStackSize,maxResultStackSize);
 	}
 	
 	/**

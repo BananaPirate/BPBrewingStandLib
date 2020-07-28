@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import org.bukkit.inventory.ItemStack;
 import org.sijbesma.bp.bpbrewingstandlib.datatypes.RecipeContainer;
+import static org.sijbesma.bp.utils.DebugLogger.debug;
 
 public class RecipeManager {
 	//slot validation data structures
@@ -19,27 +20,38 @@ public class RecipeManager {
 	private static HashMap<ItemStack,LinkedList<RecipeContainer>> bottleRecipeMap = new HashMap<ItemStack,LinkedList<RecipeContainer>>();
 	//
 	
-	public static boolean isValidIngredientSlot(ItemStack item) {
+	public boolean isValidIngredientSlot(ItemStack item) {
 		item = item.clone();
 		item.setAmount(1);
 		return validIngredientSlotSet.contains(item);
 	}
 	
-	public static boolean isValidBottleSlot(ItemStack item) {
+	public boolean isValidBottleSlot(ItemStack item) {
 		item = item.clone();
 		item.setAmount(1);
 		return validBottleSlotSet.contains(item);
 	}
 	
-	public static int getMaxStackSizeAllowed(ItemStack item) {
+	public int getMaxStackSizeAllowed(ItemStack item) {
 		item = item.clone();
 		item.setAmount(1);
-		//return value if exists else return 0
-		return bottleSlotStackMaxMap.containsKey(item) ? bottleSlotStackMaxMap.get(item) : 0 ;
+		//return value if exists else return -1
+		return bottleSlotStackMaxMap.containsKey(item) ? bottleSlotStackMaxMap.get(item) : -1 ;
 	}
-	
-	
-	public static void addRecipe(RecipeContainer recipe) {
+        
+        public LinkedList<RecipeContainer> getRecipesByIngredient(ItemStack ingredient){
+            ingredient = ingredient.clone();
+            ingredient.setAmount(1);
+            return ingredientRecipeMap.get(ingredient);
+        }
+        
+         public LinkedList<RecipeContainer> getRecipesByBottle(ItemStack bottle){
+             bottle = bottle.clone();
+             bottle.setAmount(1);
+             return bottleRecipeMap.get(bottle);
+        }
+
+	public void addRecipe(RecipeContainer recipe) {
 		recipe = recipe.clone();
 		//add to the recipeSet
 		recipeSet.add(recipe);
@@ -61,6 +73,7 @@ public class RecipeManager {
 		validBottleSlotSet.add(singleBottle);
 		//stores whichever value for that item in bottleSlot is largest.
 		int bottleMax = recipe.getMaxBottleStackSize();
+                //debug("bottleMax: "+bottleMax);
 		if (bottleSlotStackMaxMap.containsKey(singleBottle)) {
 			int storedMax = bottleSlotStackMaxMap.get(singleBottle);
 			if(storedMax >= 0 && storedMax < bottleMax) {
@@ -84,6 +97,7 @@ public class RecipeManager {
 		validBottleSlotSet.add(singleResult);
 		//stores whichever value for that item in bottleSlot is largest.
 		int resultMax = recipe.getMaxResultStackSize();
+                //debug("resultMax: "+ resultMax);
 		if (bottleSlotStackMaxMap.containsKey(singleResult)) {
 			int storedMax = bottleSlotStackMaxMap.get(singleResult);
 			if(storedMax >= 0 && storedMax < resultMax) {
@@ -92,9 +106,10 @@ public class RecipeManager {
 		} else {
 			bottleSlotStackMaxMap.put(singleResult,resultMax);
 		}
+                //debug(bottleSlotStackMaxMap);
 	}
 	
-	public static void removeRecipeContainer(RecipeContainer recipe) {
+	public void removeRecipeContainer(RecipeContainer recipe) {
 		recipeSet.remove(recipe);
 		//
 		ItemStack singleIngredient = recipe.getIngredient();
@@ -116,7 +131,7 @@ public class RecipeManager {
 		repopulateValidSlotSets();
 	}
 	
-	private static void repopulateValidSlotSets() {
+	private void repopulateValidSlotSets() {
 		validIngredientSlotSet.clear();
 		validBottleSlotSet.clear();
 		for(RecipeContainer recipe: recipeSet) {

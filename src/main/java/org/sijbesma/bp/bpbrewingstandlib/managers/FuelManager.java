@@ -32,7 +32,7 @@ public class FuelManager {
 	 * @param item The item to test
 	 * @return true if it's a valid item in a brewing stand's fuel slot, false if invalid.
 	 */
-	public static boolean isValidFuelSlotItem(ItemStack item) {
+	public boolean isValidFuelSlotItem(ItemStack item) {
 		item = item.clone();
 		item.setAmount(1);
 		if (validInFuelSlotSet.contains(item)) {
@@ -46,7 +46,7 @@ public class FuelManager {
 	 * @param item the ItemStack for which to get the fuel power
 	 * @return
 	 */
-	public static int getFuelPower(ItemStack item) {
+	public int getFuelPower(ItemStack item) {
 		int amount = item.getAmount();
 		ItemStack itemSingle = item.clone();
 		itemSingle.setAmount(1);
@@ -69,7 +69,7 @@ public class FuelManager {
 	 * registers a FuelContainer as a possible brewing stand fuel source
 	 * @param fuelContainer the FuelContainer to register as a fuel source
 	 */
-	public static void addFuelItemStack(FuelItemStack fuelItemStack) {
+	public void addFuelItemStack(FuelItemStack fuelItemStack) {
 		fuelItemStack = fuelItemStack.clone();
 		fuelItemStackSet.add(fuelItemStack);
 		debug("Registering Item: "+fuelItemStack);
@@ -109,7 +109,7 @@ public class FuelManager {
 	 * removes a FuelContainer from the registry of possible brewing stand fuel sources
 	 * @param fuelContainer the FuelContainer to remove
 	 */
-	public static void removeFuelItemStack(FuelItemStack fuelItemStack) {
+	public void removeFuelItemStack(FuelItemStack fuelItemStack) {
 		debug("removeFuel",true);
 		fuelItemStackSet.remove(fuelItemStack);
 		ItemStack singleItem = (ItemStack) fuelItemStack.clone();
@@ -123,7 +123,7 @@ public class FuelManager {
 		repopulateValidInFuelSlotSet();
 	}
 
-	private static void repopulateValidInFuelSlotSet() {
+	private void repopulateValidInFuelSlotSet() {
 		debug("repopulateValidInFuelSlotSet",true);
 		validInFuelSlotSet.clear();
 		for (FuelItemStack fuelItemStack : fuelItemStackSet) {
